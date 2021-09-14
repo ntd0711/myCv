@@ -31,7 +31,7 @@ navLink.forEach((item) => {
 
 function scrollTop() {
     const scrollTop = document.getElementById('scroll-top');
-
+    console.log(this);
     if (this.scrollY >= 560) {
         scrollTop.classList.add('show-scroll');
     } else {
@@ -39,7 +39,23 @@ function scrollTop() {
     }
 }
 
-window.addEventListener('scroll', scrollTop);
+function throttle(callback, wait) {
+    let isThrottleLing = false;
+
+    return function () {
+        if (isThrottleLing) return;
+
+        isThrottleLing = true;
+        setTimeout(() => {
+            callback();
+            isThrottleLing = false;
+        }, wait);
+    };
+}
+
+const throttleScroll = throttle(scrollTop, 300);
+
+window.addEventListener('scroll', throttleScroll);
 
 // ================ SHOW ARROW SCROLL TOP ===============
 
@@ -83,11 +99,11 @@ const resumeButton = document.getElementById('resume-button');
 
 // Html2pdf options
 let opt = {
-    margin: 0,
+    margin: [0, -0.07, 0, 0],
     filename: 'myCv.pdf',
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 4 },
-    jsPDF: { format: 'a4', orientation: 'portrait' },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
 };
 
 // Function to call areaCv and Html2Pdf options
